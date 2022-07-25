@@ -4,6 +4,7 @@ const cartItemsElement = document.querySelector('#cart__items');
 const totalPriceElement = document.querySelector('#totalPrice');
 const totalQuantityElement = document.querySelector('#totalQuantity');
 const pricesMap = new Map();
+const submitButton = document.querySelector('#order');
 
 if (cart) {
     let cartItems = JSON.parse(cart);
@@ -61,6 +62,10 @@ if (cart) {
             computeAndDisplayPriceAndQuantity(cartItems);
         }
     });
+
+    submitButton.addEventListener('click', e => {
+        e.preventDefault();
+    });
 }
 
 function computeAndDisplayPriceAndQuantity(cartItems) {
@@ -74,3 +79,4 @@ function computeAndDisplayPriceAndQuantity(cartItems) {
     totalPriceElement.innerText = totalPrice;
     totalQuantityElement.innerText = totalQuantity;
 }
+
