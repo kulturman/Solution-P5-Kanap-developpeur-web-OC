@@ -5,6 +5,15 @@ const totalPriceElement = document.querySelector('#totalPrice');
 const totalQuantityElement = document.querySelector('#totalQuantity');
 const pricesMap = new Map();
 const submitButton = document.querySelector('#order');
+const inputsElement = document.querySelectorAll('.cart__order__form__question input');
+
+const fieldsMap = {
+    firstName: { regex: /^[a-zA-Z]+$/, errorMessage: 'Veuillez entrer un prénom valide', isValid: false },
+    lastName: { regex: /^[a-zA-Z]+$/, errorMessage: 'Veuillez entrer un nom valide', isValid: false },
+    email: { regex: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/, errorMessage: 'Veuillez entrer une adresse mail valide', isValid: false },
+    address: { regex: /^[A-Za-z0-9\s]{5,100}$/, errorMessage: 'Veuillez entrer une adresse valide', isValid: false },
+    city: { regex: /^[A-Za-z0-9\s]{5,100}$/, errorMessage: 'Veuillez entrer un nom de ville valide', isValid: false },
+};
 
 if (cart) {
     let cartItems = JSON.parse(cart);
@@ -65,7 +74,35 @@ if (cart) {
 
     submitButton.addEventListener('click', e => {
         e.preventDefault();
+        //Check if all fields are valid
+        let invalidElement = Object.keys(fieldsMap).findIndex(field => fieldsMap[field].isValid == false);
+        
+        if (invalidElement >= 0) {
+            alert('Veuillez remplir correctement tous les champs');
+            return;
+        }
+
+        //Submit the form here
+
     });
+
+    for (inputElement of inputsElement) {
+        inputElement.addEventListener('keyup', e => {
+            const value = e.target.value;
+            const name = e.target.name;
+            const inputData = fieldsMap[name];
+
+            if (inputData.regex.test(value)) {
+                document.querySelector(`#${name}ErrorMsg`).innerText = '';
+                inputData.isValid = true;
+            }
+            else {
+                document.querySelector(`#${name}ErrorMsg`).innerText = inputData.errorMessage;
+                inputData.isValid = false;
+            }
+        });
+    }
+
 }
 
 function computeAndDisplayPriceAndQuantity(cartItems) {
