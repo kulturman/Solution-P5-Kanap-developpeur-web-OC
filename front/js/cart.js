@@ -15,8 +15,12 @@ const fieldsMap = {
     city: { regex: /^[A-Za-z0-9\s]{5,100}$/, errorMessage: 'Veuillez entrer un nom de ville valide', isValid: false },
 };
 
+//disable button
+submitButton.disabled = true;
+
 if (cart) {
     let cartItems = JSON.parse(cart);
+    submitButton.disabled = false;
     
     (async function() {
         //This is not really optimized, since we may query the same product multiple times, will fix that later (maybe)
@@ -73,7 +77,7 @@ if (cart) {
     });
 
     submitButton.addEventListener('click', e => {
-        e.preventDefault();
+        e.preventDefault();        
         //Check if all fields are valid
         let invalidElement = Object.keys(fieldsMap).findIndex(field => fieldsMap[field].isValid == false);
         
@@ -83,7 +87,28 @@ if (cart) {
         }
 
         //Submit the form here
+        const contactData = {};
 
+        inputsElement.forEach(input => {
+            contactData[input.name] = input.value;
+        });
+
+        const productsIds = cartItems.map(product => product.id);console.log(productsIds);
+
+        fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            body:JSON.stringify({ contact: contactData, products: productsIds }),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })    
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            localStorage.removeItem(CART_KEY);
+            window.location.href = `confirmation.html?id=${data.orderId}`;
+        });
     });
 
     for (inputElement of inputsElement) {
@@ -95,6 +120,7 @@ if (cart) {
             if (inputData.regex.test(value)) {
                 document.querySelector(`#${name}ErrorMsg`).innerText = '';
                 inputData.isValid = true;
+                fieldsMap[name].value = value;
             }
             else {
                 document.querySelector(`#${name}ErrorMsg`).innerText = inputData.errorMessage;
@@ -116,4 +142,3 @@ function computeAndDisplayPriceAndQuantity(cartItems) {
     totalPriceElement.innerText = totalPrice;
     totalQuantityElement.innerText = totalQuantity;
 }
-
