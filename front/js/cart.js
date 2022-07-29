@@ -21,7 +21,7 @@ submitButton.disabled = true;
 if (cart) {
     let cartItems = JSON.parse(cart);
     submitButton.disabled = false;
-    
+
     (async function() {
         //This is not really optimized, since we may query the same product multiple times, will fix that later (maybe)
         for (let cartItem of cartItems) {
@@ -93,7 +93,7 @@ if (cart) {
             contactData[input.name] = input.value;
         });
 
-        const productsIds = cartItems.map(product => product.id);console.log(productsIds);
+        const productsIds = cartItems.map(product => product.id);
 
         fetch("http://localhost:3000/api/products/order", {
             method: "POST",
@@ -111,7 +111,7 @@ if (cart) {
         });
     });
 
-    for (inputElement of inputsElement) {
+    for (let inputElement of inputsElement) {
         inputElement.addEventListener('keyup', e => {
             const value = e.target.value;
             const name = e.target.name;
