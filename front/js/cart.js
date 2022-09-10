@@ -24,7 +24,7 @@ if (cart) {
 
     (async function() {
         //This is not really optimized, since we may query the same product multiple times, will fix that later (maybe)
-        for (let cartItem of cartItems) {
+        cartItems.forEach(async cartItem => {
             const response = await fetch('http://localhost:3000/api/products/' + cartItem.id);
             const product = await response.json();
             pricesMap.set(product._id, product.price);
@@ -51,8 +51,9 @@ if (cart) {
                     </div>
                 </article>
             `);
-        }
-        computeAndDisplayPriceAndQuantity(cartItems);
+
+            computeAndDisplayPriceAndQuantity(cartItems);
+        })        
     })()
     
     cartItemsElement.addEventListener('click', e => {
@@ -111,7 +112,7 @@ if (cart) {
         });
     });
 
-    for (let inputElement of inputsElement) {
+    inputsElement.forEach(inputElement => {
         inputElement.addEventListener('keyup', e => {
             const value = e.target.value;
             const name = e.target.name;
@@ -127,18 +128,17 @@ if (cart) {
                 inputData.isValid = false;
             }
         });
-    }
-
+    })
 }
 
 function computeAndDisplayPriceAndQuantity(cartItems) {
     let totalPrice = 0;
     let totalQuantity = 0;
 
-    for (let cartItem of cartItems) {
+    cartItems.forEach(cartItem => {
         totalPrice += pricesMap.get(cartItem.id) * cartItem.quantity;
         totalQuantity += cartItem.quantity;
-    }
+    })
     totalPriceElement.innerText = totalPrice;
     totalQuantityElement.innerText = totalQuantity;
 }

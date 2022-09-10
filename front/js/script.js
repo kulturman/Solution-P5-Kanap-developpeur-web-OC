@@ -3,7 +3,7 @@ const itemsHTMLElements = document.getElementById('items')
 fetch('http://localhost:3000/api/products')
 .then(response => response.json())
 .then(products => {
-    for (product of products) {
+    products.forEach(product => {
         itemsHTMLElements.insertAdjacentHTML('afterbegin', `
             <a href="./product.html?id=${product._id}">
                 <article>
@@ -13,5 +13,5 @@ fetch('http://localhost:3000/api/products')
                 </article>
             </a>
         `)
-    }
+    });
 })
