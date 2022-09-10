@@ -16,9 +16,7 @@ fetch('http://localhost:3000/api/products/' + id)
         descriptionElement.innerText = product.description;
         titleElement.innerHTML = product.name;
 
-        for (let color of product.colors) {
-            colorsElement.insertAdjacentHTML('beforeend', `<option value="${color}">${color}</option>`);
-        }
+        product.colors.forEach(color => colorsElement.insertAdjacentHTML('beforeend', `<option value="${color}">${color}</option>`));
     })
 
 addToCartButton.addEventListener('click', e => {
