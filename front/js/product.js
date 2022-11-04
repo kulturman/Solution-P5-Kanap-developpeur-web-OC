@@ -20,12 +20,12 @@ fetch('http://localhost:3000/api/products/' + id)
     })
 
 addToCartButton.addEventListener('click', e => {
-    const quantity = +quantityElement.value;
+    const quantity = quantityElement.valueAsNumber;
     const color = colorsElement.value;
 
     if (quantity <= 0 || quantity > 100 || color == '') {
         alert('Veuillez sélectionner une quantité entre 1 et 100 et une couleur');
-    }
+    } 
     else {
         let cart = localStorage.getItem(CART_KEY);
         if (cart == null) {

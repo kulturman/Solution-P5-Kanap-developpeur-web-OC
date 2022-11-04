@@ -70,7 +70,7 @@ if (cart) {
         }
 
         if (e.target.classList.contains('itemQuantity')) {
-            const quantity = +e.target.value;
+            const quantity = e.target.valueAsNumber;
             cartItems[productIndex].quantity = quantity;
             localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
             computeAndDisplayPriceAndQuantity(cartItems);
