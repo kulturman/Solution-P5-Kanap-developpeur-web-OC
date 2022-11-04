@@ -1,4 +1,4 @@
-const itemsHTMLElements = document.getElementById('items')
+const itemsHTMLElements = document.querySelector('#items')
 
 fetch('http://localhost:3000/api/products')
 .then(response => response.json())
